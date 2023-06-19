@@ -1,0 +1,18 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+rule "Republic Day is beween leave"
+	dialect "mvel"
+	salience 9
+	when
+		f : foo( message == null , $led : leaveEndDate after ( LocalDate.parse("2023-01-26") ) , $lsd : leaveStartDate before ( LocalDate.parse("2023-01-26") ) , betweenHoliday == true )
+	then
+		modify( f ) {
+				setMessage( "Republic Day will also be considered as leave ( Republic Day between leave)" ), 
+				setLeaveCount( ChronoUnit.DAYS.between($lsd, $led)+1 ), 
+				setReset( false )
+		}
+end

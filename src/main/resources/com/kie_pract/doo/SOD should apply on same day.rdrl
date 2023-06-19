@@ -1,0 +1,14 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+
+rule "SOD should apply on same day"
+	dialect "mvel"
+	when
+		f : foo( leaveType == "SOD" , lsd : leaveStartDate, leaveStartDate.dayOfWeek != DayOfWeek.SATURDAY || leaveStartDate.now() != lsd , message == null )
+	then
+		modify( f ) {
+				setMessage( "SOD must be applied only on Saturdays" ), 
+				setReset( true )
+		}
+end

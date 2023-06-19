@@ -1,0 +1,13 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+
+rule "set between holidays true"
+	dialect "mvel"
+	when
+		f : foo( sundays > 0 , betweenSunday == true )
+	then
+		modify( f ) {
+				setLeaveCount( 0 )
+		}
+end

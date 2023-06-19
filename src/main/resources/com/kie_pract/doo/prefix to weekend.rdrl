@@ -1,0 +1,18 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+
+rule "prefix to weekend"
+	dialect "mvel"
+	no-loop true
+	salience 2
+	when
+		f : foo( leaveType != "SOD" , leaveType != "OD" , prefixweek == true , message == null , $lsd : leaveStartDate, leaveStartDate.dayOfWeek == DayOfWeek.SATURDAY , $led : leaveEndDate == $lsd )
+	then
+		modify( f ) {
+				setMessage( "Sunday also would be considered as a Leave (prefix to weekend) as per Policy. Would you like to Proceed ahead?" ), 
+				setLeaveCount( 2 )
+		}
+end

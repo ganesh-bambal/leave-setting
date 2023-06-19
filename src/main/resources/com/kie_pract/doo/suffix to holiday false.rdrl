@@ -1,0 +1,16 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+rule "suffix to holiday false"
+	dialect "mvel"
+	salience 8
+	when
+		f : foo( message == null , listOfHolidays contains f.leaveStartDate.minusDays(1) || listOfHolidays contains f.leaveEndDate.minusDays(1) , $led : leaveEndDate, $lsd : leaveStartDate, leaveCount == 0 , suffixHoliday == false )
+	then
+		modify( f ) {
+				setLeaveCount( ChronoUnit.DAYS.between($lsd, $led)+1 )
+		}
+end

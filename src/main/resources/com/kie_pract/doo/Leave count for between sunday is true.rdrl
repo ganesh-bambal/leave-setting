@@ -1,0 +1,16 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+rule "Leave count for between sunday is true"
+	dialect "mvel"
+	salience 0
+	when
+		f : foo( $lsd : leaveStartDate, $led : leaveEndDate, leaveCount == 0 , betweenSunday == true )
+	then
+		modify( f ) {
+				setLeaveCount( ChronoUnit.DAYS.between($lsd, $led)+1 )
+		}
+end

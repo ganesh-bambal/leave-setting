@@ -1,0 +1,16 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalTime;
+
+rule "Apply leave before nine thirty"
+	dialect "mvel"
+	salience 10
+	when
+		f : foo( leaveStartDate == f.leaveStartDate.now() , eval( ( LocalTime.now().isAfter(LocalTime.parse("09:30:00"))) ), message == null )
+	then
+		modify( f ) {
+				setMessage( "Apply this leave before 9:30 AM " ), 
+				setReset( true )
+		}
+end

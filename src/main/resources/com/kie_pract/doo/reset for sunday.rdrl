@@ -1,0 +1,17 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+
+rule "reset for sunday"
+	dialect "mvel"
+	no-loop true
+	when
+		f : foo( message == null , $lsd : leaveStartDate, $led : leaveEndDate, leaveStartDate.dayOfWeek == DayOfWeek.SUNDAY || leaveEndDate.dayOfWeek == DayOfWeek.SUNDAY )
+	then
+		modify( f ) {
+				setMessage( "Sunday can not be leave start Date or leave end date " ), 
+				setReset( true )
+		}
+end

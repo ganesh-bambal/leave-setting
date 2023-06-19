@@ -1,0 +1,15 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+
+rule "Reset if leave start date is a holiday"
+	dialect "mvel"
+	salience 10
+	when
+		f : foo( listOfHolidays contains f.leaveStartDate , reset == false )
+	then
+		modify( f ) {
+				setMessage( "Leave start date can not be a holiday" ), 
+				setReset( true )
+		}
+end

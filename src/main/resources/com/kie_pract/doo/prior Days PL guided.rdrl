@@ -1,0 +1,17 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+
+rule "prior Days PL guided"
+	dialect "mvel"
+	salience 10
+	when
+		f : foo( message == null , $priorDays : priorDaysPL, eval( $priorDays> ChronoUnit.DAYS.between(LocalDate.now(),leaveStartDate ) ), leaveType == "PL" )
+	then
+		modify( f ) {
+				setMessage( "As per the policy PL can be apply "+ $priorDays+" Days Before." ), 
+				setReset( true )
+		}
+end

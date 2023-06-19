@@ -1,0 +1,16 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.temporal.ChronoUnit;
+import java.time.LocalDate;
+
+rule "set beween sunday true"
+	dialect "mvel"
+	salience 9
+	when
+		f : foo( betweenSunday == true , $sun : sundays > 0 , message == null , $led : leaveEndDate, $lsd : leaveStartDate, leaveCount == 0 )
+	then
+		modify( f ) {
+				setMessage( String.valueOf($sun) + " Sundays will also be considered as leave would you like to go ahead." )
+		}
+end

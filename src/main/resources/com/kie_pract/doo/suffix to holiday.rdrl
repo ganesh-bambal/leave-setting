@@ -1,0 +1,17 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+rule "suffix to holiday"
+	dialect "mvel"
+	salience 8
+	when
+		f : foo( message == null , listOfHolidays contains f.leaveStartDate.minusDays(1) || listOfHolidays contains f.leaveEndDate.minusDays(1) , $led : leaveEndDate, $lsd : leaveStartDate, suffixHoliday == true , leaveCount == 0 , leaveType != "SOD" , leaveType != "OD" , betweenSunday == true )
+	then
+		modify( f ) {
+				setMessage( "Holiday also would be considered as a Leave (suffix to Holiday) as per Policy. Would you like to Proceed ahead?" ), 
+				setLeaveCount( ChronoUnit.DAYS.between($lsd, $led)+2 )
+		}
+end

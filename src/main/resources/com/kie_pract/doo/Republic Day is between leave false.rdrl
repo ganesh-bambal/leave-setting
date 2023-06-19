@@ -1,0 +1,16 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+rule "Republic Day is between leave false"
+	dialect "mvel"
+	salience 9
+	when
+		f : foo( $led : leaveEndDate after ( LocalDate.parse("2023-01-26") ) , $lsd : leaveStartDate before ( LocalDate.parse("2023-01-26") ) , betweenHoliday == false , leaveCount == 0 )
+	then
+		modify( f ) {
+				setLeaveCount( ChronoUnit.DAYS.between($lsd, $led) )
+		}
+end

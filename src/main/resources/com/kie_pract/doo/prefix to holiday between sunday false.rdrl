@@ -1,0 +1,17 @@
+package com.kie_pract.doo;
+
+import java.lang.Number;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
+rule "prefix to holiday between sunday false"
+	dialect "mvel"
+	salience 8
+	when
+		f : foo( prefixHoliday == true , message == null , listOfHolidays contains f.leaveStartDate.plusDays(1) || listOfHolidays contains f.leaveEndDate.plusDays(1) , $led : leaveEndDate, $lsd : leaveStartDate, leaveType != "SOD" , leaveType != "OD" , betweenSunday == false , $sun : sundays)
+	then
+		modify( f ) {
+				setMessage( " Holiday also would be considered as a Leave (Prefix to Holiday) as per Policy. Would you like to Proceed ahead?" ), 
+				setLeaveCount( ChronoUnit.DAYS.between($lsd, $led)+2-$sun )
+		}
+end
